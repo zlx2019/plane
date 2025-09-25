@@ -32,6 +32,7 @@ func cmd() error {
 	if err != nil {
 		return fmt.Errorf("open config file error: %w", err)
 	}
+	defer file.Close()
 	bytes, err := io.ReadAll(file)
 	if err != nil {
 		return fmt.Errorf("read config error: %w", err)
