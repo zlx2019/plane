@@ -66,8 +66,6 @@ func startForward(config ListenConfig) {
 	slog.Info("Start listener on: " + bindLocalAddr)
 	defer listener.Close()
 	reqs := 0
-	idx := reqs % len(config.Forwards)
-	forward := config.Forwards[idx]
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
@@ -77,6 +75,9 @@ func startForward(config ListenConfig) {
 			slog.Error("Accept local port on " + bindLocalAddr + ", error: " + err.Error())
 			continue
 		}
+		idx := reqs % len(config.Forwards)
+		forward := config.Forwards[idx]
+		reqs++
 		go handeConnection(conn, forward)
 	}
 }
