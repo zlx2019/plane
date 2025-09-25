@@ -65,7 +65,7 @@ func init() {
 // Config 配置实体,用于映射config.json配置文件
 type Config struct {
 	// 要代理的端口
-	ListenerPort int16 `json:"listener_port"`
+	ListenerPort int32 `json:"listener_port"`
 	// 代理要访问的具体服务
 	Forward []string `json:"forward"`
 }
@@ -121,8 +121,7 @@ func connProxy(conn net.Conn, forward string) {
 	}
 	defer proxyClient.Close()
 	// 设置客户端读取数据超时时间(连接有效时间5s),超过后断开连接(防止HTTP协议卡死)
-	conn.SetReadDeadline(time.Now().Add(time.Second * 3))
-	// TODO 将客户端和目标服务端的通信数据进行交换
+	conn.SetReadDeadline(time.Now().Add(time.Minute * 3))
 	// 将客户端的请求数据流拷贝到目标服务端
 	go io.Copy(conn, proxyClient)
 	// 再将目标服务端响应的数据流拷贝给客户端
